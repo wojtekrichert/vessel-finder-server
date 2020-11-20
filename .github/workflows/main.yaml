@@ -1,0 +1,39 @@
+name: main
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+  release:
+    types:
+      - created
+
+env:
+  GIT_SHA: ${{ github.sha }}
+  GIT_REF: ${{ github.ref }}
+  ACTION_TRIGGERED: ${{ github.event_name }}
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+jobs:
+  development:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to dockerhub
+      run: |
+        echo "${DOCKERHUB_PASSWORD}" | docker login --username ${DOCKERHUB_USERNAME} --password-stdin
+
+    - name: Build docker container
+      run: |
+        docker build -t ${DOCKERHUB_USERNAME}/vessel_finder_server:${GIT_SHA} .
+
+    - name: Push docker container
+      run: |
+        docker push ${DOCKERHUB_USERNAME}/vessel_finder_server:${GIT_SHA}
