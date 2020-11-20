@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+
+  app:
+    image: '${DOCKER_IMAGE?Variable not set}:${TAG?Variable not set}'
+    env_file:
+      - .env
+    build:
+      context: ./
+      dockerfile: Dockerfile
