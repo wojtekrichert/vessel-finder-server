@@ -52,10 +52,13 @@ jobs:
       run: |
         mkdir -p ~/.ssh/; echo "${BOT_RSA_KEY}" > ~/.ssh/id_rsa; chmod 0600 ~/.ssh/id_rsa
         yq w -i ./chart/vessel-server/Chart.yaml appVersion ${GIT_SHA}
-        git clone ${KUBE_SYSTEM_REPO_URL}
-        rm -rf ./kube-system/chart/vessel-server
-        cp -r ./chart/vessel-server ./kube-system/chart/vessel-server
-        cd kube-system
+
+
+
+        git clone ${KUBE_SYSTEM_REPO_URL} /tmp/kube-system
+        rm -rf /tmp/kube-system/chart/vessel-server
+        cp -r ./chart/vessel-server /tmp/kube-system/chart/vessel-server
+        cd /tmp/kube-system
         git add -A
         git commit -m "Update vessel-server with version ${GIT_SHA}"
         git push origin master
