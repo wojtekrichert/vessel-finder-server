@@ -49,6 +49,7 @@ jobs:
         docker push ${DOCKERHUB_USERNAME}/vessel_finder_server:${GIT_SHA}
     
     - name: Update helm chart
+      if: github.ref == 'refs/heads/master'
       run: |
         set -x 
         mkdir -p ~/.ssh/; echo "${BOT_RSA_KEY}" > ~/.ssh/id_rsa; chmod 0600 ~/.ssh/id_rsa
