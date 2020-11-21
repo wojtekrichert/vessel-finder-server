@@ -50,6 +50,7 @@ jobs:
     
     - name: Update helm chart
       run: |
+        set -x 
         mkdir -p ~/.ssh/; echo "${BOT_RSA_KEY}" > ~/.ssh/id_rsa; chmod 0600 ~/.ssh/id_rsa
         yq w -i ./chart/vessel-server/Chart.yaml appVersion ${GIT_SHA}
 
